@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {Book} from '../../model';
 
 @Component({
@@ -7,14 +7,15 @@ import {Book} from '../../model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './book-details.component.html',
-  styleUrls: ['./book-details.component.scss']
+  styleUrls: ['./book-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BookDetailsComponent {
   @Input("value")
   book: Book | undefined | null;
 
   @Output("valueChange")
-  bookChange = new EventEmitter<Book>()
+  bookChange = new EventEmitter<Book>();
 
   getInputValuesAndNotifyOnBookChange(event: Event) {
     event.preventDefault();
