@@ -1,9 +1,10 @@
-import {Component, OnDestroy} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Signal, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {BookDetailsComponent} from '../book-details/book-details.component';
 import {Book} from '../../model';
 import {BookService} from '../../services/book.service';
-import {map, Observable, Subscription} from 'rxjs';
+import {toSignal} from '@angular/core/rxjs-interop';
+import {debounceTime, distinctUntilChanged, fromEvent, map} from 'rxjs';
 
 @Component({
   selector: 'ba-book-overview',
@@ -12,12 +13,16 @@ import {map, Observable, Subscription} from 'rxjs';
   templateUrl: './book-overview.component.html',
   styleUrls: ['./book-overview.component.scss']
 })
-export class BookOverviewComponent {
+export class BookOverviewComponent implements AfterViewInit {
+  @ViewChild('searchInput')
+  searchInput: ElementRef | undefined
+
   selectedBook: Book | null = null;
-  readonly books$: Observable<Book[]>;
+  readonly books: Signal<Book[]>;
+  private timeoutHandle: number | null = null;
 
   constructor(private readonly bookService: BookService) {
-    this.books$ = bookService.findAll();
+    this.books = toSignal(bookService.findAll(), {initialValue: []});
   }
 
   selectBookOf(book: Book) {
@@ -33,5 +38,28 @@ export class BookOverviewComponent {
       .subscribe(
         justUpdatedBook => this.selectedBook = justUpdatedBook
       );
+  }
+
+  ngAfterViewInit(): void {
+    fromEvent<Event>(this.searchInput?.nativeElement, 'input')
+      .pipe(
+        map(event => {
+          const searchInput = event.target as HTMLInputElement;
+          return searchInput.value;
+        }),
+        debounceTime(500),
+        distinctUntilChanged()
+      )
+      .subscribe(query => {
+        console.log('Native: ', query);
+      })
+    // this.searchInput?.nativeElement.addEventListener('input', (event: Event) => {
+    //   const searchInput = event.target as HTMLInputElement;
+    //   const query = searchInput.value;
+    //   if (this.timeoutHandle !== null) {
+    //     clearTimeout(this.timeoutHandle);
+    //   }
+    //   this.timeoutHandle = window.setTimeout(() => console.log('Native: ', query), 500);
+    // })
   }
 }

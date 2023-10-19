@@ -1,27 +1,33 @@
-<div class="row">
-  <section class="col-8">
-    <table class="table table-striped table-hover">
-      <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Author</th>
-        <th scope="col">Title</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let book of (books$ | async); index as i"
-          [class.table-primary]="isSelectedBookOf(book)"
-          (click)="selectBookOf(book)">
-        <th scope="row">{{i + 1}}</th>
-        <td>{{book.author}}</td>
-        <td>{{book.title}}</td>
-      </tr>
-      </tbody>
-    </table>
-  </section>
-  <section class="col">
-    <ba-book-details *ngIf="selectedBook"
-                     [value]="selectedBook"
-                     (valueChange)="updateBook($event)"/>
-  </section>
-</div>
+<section>
+  <input class="form-control-lg" placeholder="Type to search" #searchInput>
+  <ul>
+    <li>{{searchInput.value}}</li>
+  </ul>
+</section>
+<!--<div class="row">-->
+<!--  <section class="col-8">-->
+<!--    <table class="table table-striped table-hover">-->
+<!--      <thead>-->
+<!--      <tr>-->
+<!--        <th scope="col">#</th>-->
+<!--        <th scope="col">Author</th>-->
+<!--        <th scope="col">Title</th>-->
+<!--      </tr>-->
+<!--      </thead>-->
+<!--      <tbody>-->
+<!--      <tr *ngFor="let book of books(); index as i"-->
+<!--          [class.table-primary]="isSelectedBookOf(book)"-->
+<!--          (click)="selectBookOf(book)">-->
+<!--        <th scope="row">{{i + 1}}</th>-->
+<!--        <td>{{book.author}}</td>-->
+<!--        <td>{{book.title}}</td>-->
+<!--      </tr>-->
+<!--      </tbody>-->
+<!--    </table>-->
+<!--  </section>-->
+<!--  <section class="col">-->
+<!--    <ba-book-details *ngIf="selectedBook"-->
+<!--                     [value]="selectedBook"-->
+<!--                     (valueChange)="updateBook($event)"/>-->
+<!--  </section>-->
+<!--</div>-->
