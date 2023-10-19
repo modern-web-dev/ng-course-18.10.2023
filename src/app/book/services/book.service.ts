@@ -1,7 +1,8 @@
 import {Book} from '../model';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 
 export class BookService {
-  private books: Book[] = [
+  private booksSubject = new BehaviorSubject<Book[]>([
     {
       id: 0,
       author: 'Douglas Crockford',
@@ -17,15 +18,22 @@ export class BookService {
       author: 'John Smith',
       title: 'Angular for Nerds'
     }
-  ];
+  ]);
 
-  constructor() {
-    console.log('new BookService()');
+  findAll(): Observable<Book[]> {
+    return this.booksSubject.asObservable();
   }
 
-  findAll(): Promise<Book[]> {
-    return new Promise<Book[]>(
-      resolve => setTimeout(() => resolve(this.books), 2000)
-    );
+  updateBook(bookToUpdate: Book): Observable<Book> {
+    return new Observable<Book>(subscriber => {
+      const bookCopy = {...bookToUpdate};
+      const currentBooks = this.booksSubject.value
+      const newBooks = currentBooks.map(
+        book => book.id === bookToUpdate.id ? bookCopy : book);
+      subscriber.next(bookCopy);
+      subscriber.complete();
+
+      this.booksSubject.next(newBooks);
+    });
   }
 }
