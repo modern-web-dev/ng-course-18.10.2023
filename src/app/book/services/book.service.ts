@@ -1,20 +1,21 @@
 import {Book} from '../model';
-import {BehaviorSubject, Observable, Subject} from 'rxjs';
+import {BehaviorSubject, map, Observable, Subject, tap} from 'rxjs';
 
 export class BookService {
+  private idSeq = 0;
   private booksSubject = new BehaviorSubject<Book[]>([
     {
-      id: 0,
+      id: ++this.idSeq,
       author: 'Douglas Crockford',
       title: 'JavaScript. The Good Parts'
     },
     {
-      id: 1,
+      id: ++this.idSeq,
       author: 'Victor Savkin',
       title: 'Angular Router'
     },
     {
-      id: 2,
+      id: ++this.idSeq,
       author: 'John Smith',
       title: 'Angular for Nerds'
     }
@@ -22,6 +23,13 @@ export class BookService {
 
   findAll(): Observable<Book[]> {
     return this.booksSubject.asObservable();
+  }
+
+  findOne(bookId: number): Observable<Book> {
+    return this.booksSubject.pipe(
+      map((books) => books.filter(book => book.id === bookId)[0]),
+      tap((data) => console.log(`Sukces: ${data}`), (data) => console.log(`Error: ${data}`))
+    )
   }
 
   updateBook(bookToUpdate: Book): Observable<Book> {

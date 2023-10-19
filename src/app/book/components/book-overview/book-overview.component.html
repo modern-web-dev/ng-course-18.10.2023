@@ -15,19 +15,36 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let book of books(); index as i"
-          [class.table-primary]="isSelectedBookOf(book)"
-          (click)="selectBookOf(book)">
-        <th scope="row">{{i + 1}}</th>
+<!--      <tr-->
+<!--        class="{{1===1?'primary':'danger'}} {{1===1?'primary':'danger'}}"-->
+<!--        [ngClass]="{-->
+<!--        'table-primary':isSelectedBookOf(book),-->
+<!--        'table-secondary':!isSelectedBookOf(book),-->
+<!--        'table-danger':book.id ===1-->
+<!--        }"-->
+
+<!--        [class.table-primary]="isSelectedBookOf(book)"-->
+<!--        [class.table-secondary]="!isSelectedBookOf(book)"-->
+<!--        [class.table-danger]="book.id ===1"-->
+<!--        (click)="openBook(book.id)"-->
+<!--        *ngFor="let book of books(); index as i"-->
+<!--      >-->
+      <tr
+        (click)="openBook(book.id)"
+        *ngFor="let book of books(); index as i"
+      >
+        <th scope="row">{{i + 1}}
+          <!--          <a routerLink="/book/{{book.id}}"> Open</a>-->
+        </th>
         <td>{{book.author}}</td>
         <td>{{book.title}}</td>
       </tr>
       </tbody>
     </table>
   </section>
-  <section class="col">
-    <ba-book-details *ngIf="selectedBook"
-                     [value]="selectedBook"
-                     (valueChange)="updateBook($event)"/>
-  </section>
+  <!--  <section class="col">-->
+  <!--    <ba-book-details *ngIf="selectedBook"-->
+  <!--                     [value]="selectedBook"-->
+  <!--                     (valueChange)="updateBook($event)"/>-->
+  <!--  </section>-->
 </div>

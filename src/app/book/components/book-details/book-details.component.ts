@@ -1,33 +1,40 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Book} from '../../model';
+import {BookService} from "../../services/book.service";
+import {ActivatedRoute, RouterLink} from "@angular/router";
+import {map, switchMap} from "rxjs";
 
 @Component({
   selector: 'ba-book-details',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './book-details.component.html',
   styleUrls: ['./book-details.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BookDetailsComponent {
-  @Input("value")
+export class BookDetailsComponent implements OnInit {
+  // @Input("id")
+  // bookId: string | undefined;
+
+  private bookService = inject(BookService)
+  private activatedRoute = inject(ActivatedRoute)
+
   book: Book | undefined | null;
 
-  @Output("valueChange")
-  bookChange = new EventEmitter<Book>();
+  ngOnInit() {
+    // if (this.bookId) {
+    const bookIdNumber = +this.activatedRoute.snapshot.params['id']//+this.bookId;
 
-  getInputValuesAndNotifyOnBookChange(event: Event) {
-    event.preventDefault();
-    const formElement = event.target as HTMLFormElement;
-    const authorInput = formElement.querySelector<HTMLInputElement>('#author');
-    const titleInput = formElement.querySelector<HTMLInputElement>('#title');
-
-    const updatedBook: Book = {
-      id: this.book?.id!,
-      author: authorInput?.value ?? '',
-      title: titleInput?.value ?? ''
-    }
-    this.bookChange.emit(updatedBook);
+    this.activatedRoute.paramMap.pipe(
+      map((params) => params.get('id')),
+      map((bookId) => parseInt(bookId as string)),
+      switchMap((bookId) => this.bookService.findOne(bookId))
+    )
+      .subscribe((book) => {
+          this.book = book;
+        }
+      );
+    // }
   }
 }
