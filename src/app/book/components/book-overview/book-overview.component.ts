@@ -1,10 +1,19 @@
-import {AfterViewInit, Component, ElementRef, Signal, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component, computed, effect,
+  ElementRef,
+  Injector,
+  runInInjectionContext,
+  signal,
+  Signal,
+  ViewChild
+} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {BookDetailsComponent} from '../book-details/book-details.component';
 import {Book} from '../../model';
 import {BookService} from '../../services/book.service';
 import {toSignal} from '@angular/core/rxjs-interop';
-import {debounceTime, distinctUntilChanged, fromEvent, map} from 'rxjs';
+import {debounceTime, distinctUntilChanged, fromEvent, map, switchMap} from 'rxjs';
 
 @Component({
   selector: 'ba-book-overview',
@@ -19,9 +28,10 @@ export class BookOverviewComponent implements AfterViewInit {
 
   selectedBook: Book | null = null;
   readonly books: Signal<Book[]>;
-  private timeoutHandle: number | null = null;
 
-  constructor(private readonly bookService: BookService) {
+  queryResults = signal<string[]>([]);
+
+  constructor(private readonly bookService: BookService, private readonly injector: Injector) {
     this.books = toSignal(bookService.findAll(), {initialValue: []});
   }
 
@@ -41,25 +51,20 @@ export class BookOverviewComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    fromEvent<Event>(this.searchInput?.nativeElement, 'input')
-      .pipe(
-        map(event => {
-          const searchInput = event.target as HTMLInputElement;
-          return searchInput.value;
-        }),
-        debounceTime(500),
-        distinctUntilChanged()
-      )
-      .subscribe(query => {
-        console.log('Native: ', query);
-      })
-    // this.searchInput?.nativeElement.addEventListener('input', (event: Event) => {
-    //   const searchInput = event.target as HTMLInputElement;
-    //   const query = searchInput.value;
-    //   if (this.timeoutHandle !== null) {
-    //     clearTimeout(this.timeoutHandle);
-    //   }
-    //   this.timeoutHandle = window.setTimeout(() => console.log('Native: ', query), 500);
-    // })
+    effect(onCleanup => {
+      const subscription = fromEvent<Event>(this.searchInput?.nativeElement, 'input')
+        .pipe(
+          map(event => {
+            const searchInput = event.target as HTMLInputElement;
+            return searchInput.value;
+          }),
+          debounceTime(500),
+          distinctUntilChanged(),
+          switchMap(query => this.bookService.search(query))
+        ).subscribe(queryResults => {
+          this.queryResults.set(queryResults);
+      });
+      onCleanup(() => subscription.unsubscribe())
+    }, {injector: this.injector, allowSignalWrites: true});
   }
 }

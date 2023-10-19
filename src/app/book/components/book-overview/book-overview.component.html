@@ -1,7 +1,7 @@
 <section>
   <input class="form-control-lg" placeholder="Type to search" #searchInput>
   <ul>
-    <li>{{searchInput.value}}</li>
+    <li *ngFor="let res of queryResults()">{{res}}</li>
   </ul>
 </section>
 <!--<div class="row">-->
