@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Signal, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, effect, ElementRef, Signal, ViewChild} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {BookDetailsComponent} from '../book-details/book-details.component';
 import {Book} from '../../model';
@@ -19,7 +19,6 @@ export class BookOverviewComponent implements AfterViewInit {
 
   selectedBook: Book | null = null;
   readonly books: Signal<Book[]>;
-  private timeoutHandle: number | null = null;
 
   constructor(private readonly bookService: BookService) {
     this.books = toSignal(bookService.findAll(), {initialValue: []});
@@ -53,13 +52,5 @@ export class BookOverviewComponent implements AfterViewInit {
       .subscribe(query => {
         console.log('Native: ', query);
       })
-    // this.searchInput?.nativeElement.addEventListener('input', (event: Event) => {
-    //   const searchInput = event.target as HTMLInputElement;
-    //   const query = searchInput.value;
-    //   if (this.timeoutHandle !== null) {
-    //     clearTimeout(this.timeoutHandle);
-    //   }
-    //   this.timeoutHandle = window.setTimeout(() => console.log('Native: ', query), 500);
-    // })
   }
 }
