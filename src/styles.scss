@@ -5,3 +5,11 @@ $enable-rounded: false;
 .nav-link.active{
   font-weight: 800;
 }
+
+.ng-invalid{
+  @extend .is-invalid;
+}
+
+.ng-valid{
+  @extend .is-valid;
+}

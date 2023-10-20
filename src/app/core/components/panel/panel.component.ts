@@ -11,5 +11,5 @@ import {CommonModule} from '@angular/common';
 export class PanelComponent {
 
   @Input({required: true})
-  title: string | undefined;
+  title: string = '';
 }

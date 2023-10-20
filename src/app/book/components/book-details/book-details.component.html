@@ -1,33 +1,22 @@
 <ba-panel title="Book">
   <form (submit)="getInputValuesAndNotifyOnBookChange($event)" [formGroup]="bookForm">
-    <div class="mb-3" formGroupName="author">
-      <label for="firstName" class="form-label">First Name:</label>
-      <input id="firstName" class="form-control"
-             [class.is-invalid]="bookForm.get('author.firstName')?.invalid"
-             [class.is-valid]="bookForm.get('author.firstName')?.valid"
-             formControlName="firstName">
-      {{bookForm.get('author.firstName')?.errors | json}}
-      <div class="invalid-feedback">
-        <ng-container *ngIf="bookForm.get('author.firstName')?.hasError('maxlength')">Value too long.</ng-container>
-        <ng-container *ngIf="bookForm.get('author.firstName')?.hasError('minlength')">Value too short.</ng-container>
+    <ng-container formGroupName="author">
+      <div class="mb-3">
+        <label for="firstName" class="form-label">First Name:</label>
+        <input id="firstName" class="form-control" formControlName="firstName">
+        <ba-validation-msg [of]="bookForm.get('author.firstName')"/>
       </div>
-      <label for="lastName" class="form-label">Last Name:</label>
-      <input id="lastName" class="form-control" formControlName="lastName">
-    </div>
+      <div class="mb-3">
+        <label for="lastName" class="form-label">Last Name:</label>
+        <input id="lastName" class="form-control" formControlName="lastName">
+        <ba-validation-msg [of]="bookForm.get('author.lastName')"/>
+      </div>
+    </ng-container>
     <div class="mb-3">
       <label for="title" class="form-label">Title:</label>
       <input id="title" class="form-control" formControlName="title">
+      <ba-validation-msg [of]="bookForm.get('title')"/>
     </div>
     <button class="btn btn-primary">Save</button>
   </form>
-<!--  <ng-container *ngIf="book?.id as bookId">-->
-<!--    <a class="btn btn-primary" [routerLink]="['..',bookId-1]">Book {{bookId - 1}}</a>-->
-<!--    <a class="btn btn-primary" [routerLink]="['..',bookId+1]">Book {{bookId + 1}}</a>-->
-<!--  </ng-container>-->
-</ba-panel>
-<ba-panel title="Debug">
-  <button class="btn btn-primary" (click)="bookForm.get('author')?.disable()">Disable</button>
-  <button class="btn btn-primary" (click)="bookForm.get('author')?.enable()">Enable</button>
-  {{bookForm.value | json}}
-  {{bookForm.valueChanges | async | json}}
 </ba-panel>

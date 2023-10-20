@@ -31,6 +31,22 @@
         "lastName": "Bloch"
       },
       "title": "Java Effective Programming"
+    },
+    {
+      "title": "TEst",
+      "author": {
+        "firstName": "Tom",
+        "lastName": "Wawrz"
+      },
+      "id": 5
+    },
+    {
+      "title": "Test2",
+      "author": {
+        "firstName": "Te",
+        "lastName": "Test2"
+      },
+      "id": 6
     }
   ]
 }

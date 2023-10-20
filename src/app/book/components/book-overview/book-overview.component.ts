@@ -5,7 +5,7 @@ import {Book} from '../../model';
 import {BehaviorSubject, debounceTime, distinctUntilChanged, map, switchMap, tap} from 'rxjs';
 import {ActivatedRoute, Router, RouterLink, RouterModule} from "@angular/router";
 import {BookApiService} from "../../services/book-api.service";
-import {PanelComponent} from "../../../core/panel/panel.component";
+import {PanelComponent} from "../../../core/components/panel/panel.component";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 
 @Component({

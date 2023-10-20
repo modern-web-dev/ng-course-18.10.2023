@@ -1,7 +1,7 @@
-import {inject, Injectable} from "@angular/core";
+import {inject} from "@angular/core";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Book} from "../model";
+import {Book, NewBook} from "../model";
 
 
 export class BookApiService {
@@ -27,5 +27,9 @@ export class BookApiService {
 
   saveBook(book: Book) {
     return this.httpClient.put<Book>(`/api/book/${book.id}`, book);
+  }
+
+  addBook(book: NewBook) {
+    return this.httpClient.post<Book>(`/api/book`, book);
   }
 }

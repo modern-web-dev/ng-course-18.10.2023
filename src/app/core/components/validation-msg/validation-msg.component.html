@@ -1,0 +1,4 @@
+<div>
+  <ng-container *ngIf="control?.hasError('maxLength')">Value too long.</ng-container>
+  <ng-container *ngIf="control?.hasError('minlength')">Value too short.</ng-container>
+</div>
