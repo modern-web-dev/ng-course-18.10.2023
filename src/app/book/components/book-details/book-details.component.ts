@@ -8,6 +8,7 @@ import {PanelComponent} from "../../../core/components/panel/panel.component";
 import {ReactiveFormsModule} from "@angular/forms";
 import {BookFormService} from "./book-form.service";
 import {ValidationMsgComponent} from "../../../core/components/validation-msg/validation-msg.component";
+import {EditablePage} from "../../../core/guards/editable-page";
 
 @Component({
   selector: 'ba-book-details',
@@ -17,7 +18,7 @@ import {ValidationMsgComponent} from "../../../core/components/validation-msg/va
   templateUrl: './book-details.component.html',
   styleUrls: ['./book-details.component.scss'],
 })
-export class BookDetailsComponent implements OnInit {
+export class BookDetailsComponent implements OnInit, EditablePage {
   private bookApiService = inject(BookApiService)
   private activatedRoute = inject(ActivatedRoute)
   private router = inject(Router)
@@ -43,7 +44,6 @@ export class BookDetailsComponent implements OnInit {
     }
   }
 
-
   getInputValuesAndNotifyOnBookChange(event: Event) {
     event.preventDefault();
     const bookFormValue = this.bookForm.getRawValue();
@@ -61,5 +61,9 @@ export class BookDetailsComponent implements OnInit {
         .subscribe(({id}) => this.router.navigate(['..', id], {relativeTo: this.activatedRoute}));
     }
 
+  }
+
+  isPersisted(): boolean {
+    return this.bookForm.pristine;
   }
 }

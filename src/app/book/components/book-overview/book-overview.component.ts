@@ -1,52 +1,49 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, Input} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {BookDetailsComponent} from '../book-details/book-details.component';
 import {Book} from '../../model';
-import {BehaviorSubject, debounceTime, distinctUntilChanged, map, switchMap, tap} from 'rxjs';
+import {map, merge, Observable, Subject, switchMap, tap} from 'rxjs';
 import {ActivatedRoute, Router, RouterLink, RouterModule} from "@angular/router";
 import {BookApiService} from "../../services/book-api.service";
 import {PanelComponent} from "../../../core/components/panel/panel.component";
-import {FormControl, ReactiveFormsModule} from "@angular/forms";
+import {ReactiveFormsModule} from "@angular/forms";
+import {TypeaheadComponent} from "./typeahead/typeahead.component";
+import {BookTableComponent} from "./book-table/book-table.component";
 
 @Component({
   selector: 'ba-book-overview',
   standalone: true,
-  imports: [CommonModule, BookDetailsComponent, RouterLink, RouterModule, PanelComponent, ReactiveFormsModule],
+  imports: [CommonModule, BookDetailsComponent, RouterLink, RouterModule, PanelComponent, ReactiveFormsModule, TypeaheadComponent, BookTableComponent],
   templateUrl: './book-overview.component.html',
-  styleUrls: ['./book-overview.component.scss']
 })
 export class BookOverviewComponent {
-  searchInput = new FormControl<string>('Init value', {nonNullable: true});
+  @Input()
+  query: string | undefined;
 
-  readonly books$$: BehaviorSubject<Book[]> = new BehaviorSubject<Book[]>([]);
+  readonly books$: Observable<Book[]>;
+
+  readonly typeaheadQuery = new Subject<string | null>();
+
   bookApiService = inject(BookApiService);
 
   constructor(private readonly router: Router, private readonly activeRoute: ActivatedRoute
   ) {
-    this.activeRoute.data
+    const booksFromRouter$ = this.activeRoute.data
       .pipe(
         map(data => data['books'])
-      )
-      .subscribe(books => {
-        this.books$$.next(books);
-      })
-    this.searchInput.valueChanges
-      .pipe(
-        debounceTime(500),
-        distinctUntilChanged(),
-        tap((query) => void this.router.navigate([], {queryParams: {query}})),
-        switchMap((query) => this.bookApiService.findByTitle(query))
-      )
-      .subscribe(books => {
-        this.books$$.next(books);
-      })
+      );
+    const booksFromTypeahead$ = this.typeaheadQuery.pipe(
+      tap((query) => void this.router.navigate([], {queryParams: {query}})),
+      switchMap(query => this.bookApiService.findByTitle(query))
+    );
+    this.books$ = merge(booksFromRouter$, booksFromTypeahead$);
   }
 
-  resetForm() {
-    this.searchInput.reset();
+  onTypeaheadChanged(query: string | null) {
+    this.typeaheadQuery.next(query);
   }
 
-  openBook(id: number) {
+  onBookClicked(id: number) {
     void this.router.navigate([id], {relativeTo: this.activeRoute});
   }
 }

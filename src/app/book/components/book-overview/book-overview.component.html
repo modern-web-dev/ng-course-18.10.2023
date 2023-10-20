@@ -1,31 +1,4 @@
 <ba-panel title="Books">
-    <section>
-      <input class="form-control-lg" placeholder="Type to search" [formControl]="searchInput">
-      <button (click)="resetForm()">Reset</button>
-    </section>
-    <div class="row">
-      <section class="col-8">
-        <table class="table table-striped table-hover">
-          <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">First name</th>
-            <th scope="col">Last name</th>
-            <th scope="col">Title</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr
-            (click)="openBook(book.id)"
-            *ngFor="let book of books$$ | async; index as i"
-          >
-            <th scope="row">{{i + 1}}</th>
-            <td>{{book.author.firstName}}</td>
-            <td>{{book.author.lastName}}</td>
-            <td>{{book.title}}</td>
-          </tr>
-          </tbody>
-        </table>
-      </section>
-    </div>
+  <ba-typeahead (inputChanged)="onTypeaheadChanged($event)" [defaultValue]="query"/>
+  <ba-book-table (bookClicked)="onBookClicked($event)" [books]="books$ | async"/>
 </ba-panel>
