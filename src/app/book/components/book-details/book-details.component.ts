@@ -20,11 +20,10 @@ export class BookDetailsComponent implements OnInit {
   book: Book | undefined | null;
 
   ngOnInit() {
-    this.activatedRoute.paramMap.pipe(
-      map((params) => params.get('id')),
-      map((bookId) => parseInt(bookId as string)),
-      switchMap((bookId) => this.bookApiService.findOne(bookId))
-    )
+    this.activatedRoute.data
+      .pipe(
+        map(data=> data['book'])
+      )
       .subscribe((book) => {
           this.book = book;
         }

@@ -20,10 +20,12 @@ export class BookOverviewComponent implements AfterViewInit {
   readonly books$$: BehaviorSubject<Book[]> = new BehaviorSubject<Book[]>([]);
   bookApiService = inject(BookApiService);
 
-  constructor(bookApiService: BookApiService, private readonly router: Router, private readonly activeRoute: ActivatedRoute
+  constructor(private readonly router: Router, private readonly activeRoute: ActivatedRoute
   ) {
-    bookApiService.findAll()
-
+    this.activeRoute.data
+      .pipe(
+        map(data=> data['books'])
+      )
       .subscribe(books => {
       this.books$$.next(books);
     })
