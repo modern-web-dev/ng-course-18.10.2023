@@ -1,5 +1,7 @@
 import {Book} from '../model';
 import {BehaviorSubject, map, Observable, Subject, tap} from 'rxjs';
+import {Injectable} from "@angular/core";
+
 
 export class BookService {
   private idSeq = 0;

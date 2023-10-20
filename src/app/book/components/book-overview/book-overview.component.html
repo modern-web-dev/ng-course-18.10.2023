@@ -15,36 +15,15 @@
       </tr>
       </thead>
       <tbody>
-<!--      <tr-->
-<!--        class="{{1===1?'primary':'danger'}} {{1===1?'primary':'danger'}}"-->
-<!--        [ngClass]="{-->
-<!--        'table-primary':isSelectedBookOf(book),-->
-<!--        'table-secondary':!isSelectedBookOf(book),-->
-<!--        'table-danger':book.id ===1-->
-<!--        }"-->
-
-<!--        [class.table-primary]="isSelectedBookOf(book)"-->
-<!--        [class.table-secondary]="!isSelectedBookOf(book)"-->
-<!--        [class.table-danger]="book.id ===1"-->
-<!--        (click)="openBook(book.id)"-->
-<!--        *ngFor="let book of books(); index as i"-->
-<!--      >-->
       <tr
         (click)="openBook(book.id)"
-        *ngFor="let book of books(); index as i"
+        *ngFor="let book of books$$ | async; index as i"
       >
-        <th scope="row">{{i + 1}}
-          <!--          <a routerLink="/book/{{book.id}}"> Open</a>-->
-        </th>
+        <th scope="row">{{i + 1}}</th>
         <td>{{book.author}}</td>
         <td>{{book.title}}</td>
       </tr>
       </tbody>
     </table>
   </section>
-  <!--  <section class="col">-->
-  <!--    <ba-book-details *ngIf="selectedBook"-->
-  <!--                     [value]="selectedBook"-->
-  <!--                     (valueChange)="updateBook($event)"/>-->
-  <!--  </section>-->
 </div>

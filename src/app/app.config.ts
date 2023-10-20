@@ -5,6 +5,7 @@ import {BookOverviewComponent} from "./book/components/book-overview/book-overvi
 import {BookService} from "./book/services/book.service";
 import {BookDetailsComponent} from "./book/components/book-details/book-details.component";
 import {NotFoundComponentComponent} from "./core/not-found-component/not-found-component.component";
+import {provideHttpClient} from "@angular/common/http";
 
 const routes: Routes = [
   {path: 'book', component: BookOverviewComponent},
@@ -18,6 +19,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes,
       withComponentInputBinding(),
       // withDebugTracing()
-      )
+      ),
+    provideHttpClient()
   ]
 };
