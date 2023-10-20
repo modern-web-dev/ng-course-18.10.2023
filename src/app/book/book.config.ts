@@ -1,6 +1,6 @@
 import {EnvironmentProviders, makeEnvironmentProviders} from '@angular/core';
-import {BookService} from './services/book.service';
+import {BookApiService} from "./services/book-api.service";
 
 export function provideBooks(): EnvironmentProviders {
-  return makeEnvironmentProviders([BookService]);
+  return makeEnvironmentProviders([BookApiService]);
 }

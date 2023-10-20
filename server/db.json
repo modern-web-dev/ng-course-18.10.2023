@@ -2,22 +2,34 @@
   "book": [
     {
       "id": 1,
-      "author": "Douglas Crockford TEst",
-      "title": "JavaScript. The Good Parts"
+      "title": "JavaScript. The Good Parts",
+      "author": {
+        "firstName": "Douglas",
+        "lastName": "Crockford"
+      }
     },
     {
       "id": 2,
-      "author": "Victor Savkin",
-      "title": "Angular Router"
+      "title": "Angular Router",
+      "author": {
+        "firstName": "Victor",
+        "lastName": "Savkin"
+      }
     },
     {
       "id": 3,
-      "author": "John Smith",
+      "author": {
+        "firstName": "John",
+        "lastName": "Smith"
+      },
       "title": "Angular for Nerds"
     },
     {
       "id": 4,
-      "author": "Joshua Bloch",
+      "author": {
+        "firstName": "Joshua",
+        "lastName": "Bloch"
+      },
       "title": "Java Effective Programming"
     }
   ]

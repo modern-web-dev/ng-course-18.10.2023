@@ -1,3 +1,21 @@
+<nav class="navbar navbar-expand-lg bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <div class="navbar-collapse" >
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="book" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Books</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="book/1" routerLinkActive="active">Book 1</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="book/2" routerLinkActive="active">Book 2</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 <main class="container mt-2">
   <router-outlet/>
 </main>

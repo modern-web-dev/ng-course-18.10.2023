@@ -1,6 +1,10 @@
 export interface Book {
   id: number;
-  author: string;
+  author: Author;
   title: string;
 }
 
+interface Author {
+  firstName: string;
+  lastName: string;
+}

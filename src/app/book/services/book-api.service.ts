@@ -4,7 +4,6 @@ import {Observable} from "rxjs";
 import {Book} from "../model";
 
 
-@Injectable({providedIn: 'root'})
 export class BookApiService {
 
   httpClient = inject(HttpClient);
@@ -16,14 +15,17 @@ export class BookApiService {
   findOne(bookId: number): Observable<Book> {
     return this.httpClient.get<Book>(`/api/book/${bookId}`);
   }
-  findByTitle(title: string): Observable<Book[]> {
-    const params = new HttpParams();
-    const paramsWithTitle = params.append('title_like',title);
 
-    return this.httpClient.get<Book[]>(`/api/book`, {params:paramsWithTitle});
+  findByTitle(title: string | null): Observable<Book[]> {
+    let params = new HttpParams();
+    if (title) {
+      params = params.append('title_like', title);
+    }
+
+    return this.httpClient.get<Book[]>(`/api/book`, {params});
   }
 
-  saveBook(book:Book){
+  saveBook(book: Book) {
     return this.httpClient.put<Book>(`/api/book/${book.id}`, book);
   }
 }
